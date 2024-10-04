@@ -31,7 +31,7 @@ with DAG(
 ) as dag:
 
     def make_logf():
-        from src.threekcal_model.worker import run
+        from threekcal_model.worker import run
         file_path= __file__
         dir_path=os.dirname(file_path)
         if not os.path.exist(dir_path):
