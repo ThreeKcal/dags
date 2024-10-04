@@ -27,7 +27,7 @@ with DAG(
     start_date=datetime(2024, 10, 4),
     end_date=datetime(2024,10,8),
     catchup=True,
-    tags=['predict', 'emotion'],
+    tags=['predict', 'emotion', 'ml'],
 ) as dag:
 
     def import_run():
