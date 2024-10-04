@@ -48,10 +48,10 @@ with DAG(
         if not os.path.exists(save_path):
             with open (save_path,mode="w",encoding='utf-8', newline='') as f:
                 writer = csv.writer(f) 
-                writer.writerrow(['num','prediction_result','prediction_score','prediction_time'])
-        with open(save_path, mode='a', endcoding='utf-8', newline='') as f:
+                writer.writerow(['num','prediction_result','prediction_score','prediction_time'])
+        with open(save_path, mode='a', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            wirter.writerow([log_data[0],log_data[1],log_data[2],log_data[3]])
+            writer.writerow([log_data[0],log_data[1],log_data[2],log_data[3]])
         
         with open(save_path,mode='r',encoding='utf-8',newline='') as f :
             csvfile = csv.reader(f)  
