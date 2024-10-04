@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from airflow import DAG
 import sklearn
+import subprocess
 from airflow.models import Variable
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
@@ -13,6 +14,10 @@ from airflow.operators.python import (
         PythonVirtualenvOperator,
 
 )
+
+
+os.environ['LC_ALL'] = 'C'
+
 with DAG(
     'predict_emotion',
     default_args={
@@ -32,8 +37,9 @@ with DAG(
 
     def make_logf():
         from threekcal_model.worker import run
+        import os
         file_path= __file__
-        dir_path=os.dirname(file_path)
+        dir_path=os.path.dirname(file_path)
         if not os.path.exist(dir_path):
             os.makedirs(dir_path, exist_ok=True)
         save_path = os.path.join(dir_path,'predict.log')
@@ -54,7 +60,7 @@ with DAG(
 
     prediction = PythonVirtualenvOperator(task_id="prediction",
             python_callable=make_logf,
-            requirements=["git+https://github.com/ThreeKcal/model.git@0.1.0/model"],
+            requirements=["git+https://github.com/ThreeKcal/model.git@0.2.0/model"],
             system_site_packages=True,
             trigger_rule='all_done'
             )
