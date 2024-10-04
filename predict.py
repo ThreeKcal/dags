@@ -30,12 +30,30 @@ with DAG(
     tags=['predict', 'emotion', 'ml'],
 ) as dag:
 
-    def import_run():
-        from threekcal_model.worker import run 
-        return run()
+    def make_logf():
+        from threekcal_model.worker import run
+        file_path= __file__
+        dir_path=os.dirname(file_path)
+        if not os.path.exist(dir_path):
+            os.makedirs(dir_path, exist_ok=True)
+        save_path = os.path.join(dir_path,'predict.log')
+        log_data=run()
+        
+        if not os.path.exists(save_path):
+            with open (save_path,mode="w",encoding='utf-8', newline='') as f:
+                writer = csv.writer(f) 
+                writer.writerrow(['prediction_result','prediction_score','prediction_time'])
+        with open(save_path, mode='a', endcoding='utf-8', newline='') as f:
+            writer = csv.writer(f)
+            wirter.writerow([logdata[0],logdata[1],logdata[2]])
+        
+        with open(save_path,mode='r',encoding='utf-8',newline='') as f :
+            csvfile = csv.reader(f)  
+            result = f"저장경로: {save_path}, 파일 크기 : {len(csvfile)}"
+        return result
 
     prediction = PythonVirtualenvOperator(task_id="prediction",
-            python_callable=import_run,
+            python_callable=make_logf,
             requirements=["git+https://github.com/ThreeKcal/model.git@0.1.0/model"],
             system_site_packages=True,
             trigger_rule='all_done'
