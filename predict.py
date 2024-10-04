@@ -34,11 +34,12 @@ with DAG(
     tags=['predict', 'emotion', 'ml'],
 ) as dag:
 
+    
     def make_logf():
         from threekcal_model.worker import run
         import os
         import csv
-        file_path= __file__
+        file_path= '/home/hahahellooo/pj3/dags'
         dir_path=os.path.dirname(file_path)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path, exist_ok=True)
@@ -54,7 +55,8 @@ with DAG(
             writer.writerow([log_data[0],log_data[1],log_data[2],log_data[3]])
         
         with open(save_path,mode='r',encoding='utf-8',newline='') as f :
-            csvfile = csv.reader(f)  
+            # csvfile이 비었는지 아닌지 확인
+            csvfile = list(csv.reader(f))  
             result = f"저장경로: {save_path}, 파일 크기 : {len(csvfile)}"
         return result
 
