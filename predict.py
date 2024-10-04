@@ -31,7 +31,7 @@ with DAG(
 ) as dag:
 
     def make_logf():
-        from threekcal_model.worker import run
+        from src.threekcal_model.worker import run
         file_path= __file__
         dir_path=os.dirname(file_path)
         if not os.path.exist(dir_path):
@@ -45,7 +45,7 @@ with DAG(
                 writer.writerrow(['prediction_result','prediction_score','prediction_time'])
         with open(save_path, mode='a', endcoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            wirter.writerow([logdata[0],logdata[1],logdata[2]])
+            wirter.writerow([log_data[0],log_data[1],log_data[2]])
         
         with open(save_path,mode='r',encoding='utf-8',newline='') as f :
             csvfile = csv.reader(f)  
