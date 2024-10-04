@@ -34,7 +34,6 @@ with DAG(
     tags=['predict', 'emotion', 'ml'],
 ) as dag:
 
-    
     def make_logf():
         from threekcal_model.worker import run
         import os
