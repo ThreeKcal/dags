@@ -40,7 +40,7 @@ with DAG(
         import os
         file_path= __file__
         dir_path=os.path.dirname(file_path)
-        if not os.path.exist(dir_path):
+        if not os.path.exists(dir_path):
             os.makedirs(dir_path, exist_ok=True)
         save_path = os.path.join(dir_path,'predict.log')
         log_data=run()
@@ -62,7 +62,8 @@ with DAG(
             python_callable=make_logf,
             requirements=["git+https://github.com/ThreeKcal/model.git@0.2.0/model"],
             system_site_packages=True,
-            trigger_rule='all_done'
+            trigger_rule='all_done',
+            venv_cache_path="tmp/airflow_venv/get_data"
             )
 
     start = EmptyOperator(task_id='start')
