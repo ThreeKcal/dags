@@ -62,8 +62,7 @@ with DAG(
             python_callable=make_logf,
             requirements=["git+https://github.com/ThreeKcal/model.git@0.2.0/model"],
             system_site_packages=True,
-            trigger_rule='all_done',
-            venv_cache_path="tmp/airflow_venv/get_data"
+            trigger_rule='all_done'
             )
 
     start = EmptyOperator(task_id='start')
