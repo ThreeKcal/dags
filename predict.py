@@ -12,7 +12,6 @@ from airflow.operators.python import (
         PythonOperator,
         BranchPythonOperator,
         PythonVirtualenvOperator,
-
 )
 
 
@@ -38,6 +37,7 @@ with DAG(
     def make_logf():
         from threekcal_model.worker import run
         import os
+        import csv
         file_path= __file__
         dir_path=os.path.dirname(file_path)
         if not os.path.exists(dir_path):
