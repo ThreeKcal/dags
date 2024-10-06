@@ -61,7 +61,7 @@ with DAG(
 
     prediction = PythonVirtualenvOperator(task_id="prediction",
             python_callable=make_logf,
-            requirements=["git+https://github.com/ThreeKcal/model.git@0.2.0/model"],
+            requirements=["git+https://github.com/ThreeKcal/model.git@0.1.0/me"],
             system_site_packages=True,
             trigger_rule='all_done'
             )
