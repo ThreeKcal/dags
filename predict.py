@@ -37,7 +37,7 @@ with DAG(
     file_path = __file__
 
 
-    def make_logf():
+    def make_logf(file_path):
         from threekcal_model.worker import run
         import os
         import csv
@@ -51,17 +51,20 @@ with DAG(
             with open (save_path,mode="w",encoding='utf-8', newline='') as f:
                 writer = csv.writer(f) 
                 writer.writerow(['num','prediction_result','prediction_score','prediction_time'])
-        existing_nums=[]
-        with open(save_path, mode='r', encoding='utf-8', newline='') as f:
-            reader = csv.reader(f)
-            next(reader) # 헤더건너뛰기
-            for row in reader:
-                existing_nums.append(int(row[0]))
+        #existing_nums=[]
+        # with open(save_path, mode='r', encoding='utf-8', newline='') as f:
+        #    reader = csv.reader(f)
+        #    next(reader) # 헤더건너뛰기
+        #    for i in range(len(log_data):
+        #        reader = [log_data[i]]
+               # existing_nums.append(reader[i][0])
+            
 
-        if int(log_data[0]) not in existing_nums:
-            with open(save_path, mode='a', encoding='utf-8', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([log_data[0], log_data[1], log_data[2], log_data[3]])
+        #if log_data[0] not in existing_nums:
+        with open(save_path, mode='a', encoding='utf-8', newline='') as f:
+            writer = csv.writer(f)
+            for i in range(len(log_data)):
+                writer.writerow([log_data[i][0], log_data[i][1], log_data[i][2], log_data[i][3]])
         
         with open(save_path,mode='r',encoding='utf-8',newline='') as f :
             # csvfile이 비었는지 아닌지 확인
