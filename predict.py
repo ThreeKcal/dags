@@ -34,13 +34,19 @@ with DAG(
     tags=['predict', 'emotion', 'ml'],
     ) as dag:
 
-    file_path = __file__
-
-
-    def make_logf(file_path):
+    
+    def make_logf(**kwargs):
         from threekcal_model.worker import run
         import os
         import csv
+        #ds_nodash 2012410071411 
+        print(kwargs['ds_nodash'])
+        print(type(kwargs['ds_nodash']))
+        a=kwargs['ds_nodash'].strfdatetime("%Y-%m-%d %H:%M:%S")
+        print(a)
+
+        file_path = f'/home/ubuntu/log/predict.log'
+        print(file_path)
         dir_path=os.path.dirname(file_path)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path, exist_ok=True)
@@ -51,21 +57,12 @@ with DAG(
             with open (save_path,mode="w",encoding='utf-8', newline='') as f:
                 writer = csv.writer(f) 
                 writer.writerow(['num','prediction_result','prediction_score','prediction_time'])
-        #existing_nums=[]
-        # with open(save_path, mode='r', encoding='utf-8', newline='') as f:
-        #    reader = csv.reader(f)
-        #    next(reader) # 헤더건너뛰기
-        #    for i in range(len(log_data):
-        #        reader = [log_data[i]]
-               # existing_nums.append(reader[i][0])
-            
 
-        #if log_data[0] not in existing_nums:
         with open(save_path, mode='a', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
             for i in range(len(log_data)):
                 writer.writerow([log_data[i][0], log_data[i][1], log_data[i][2], log_data[i][3]])
-        
+       
         with open(save_path,mode='r',encoding='utf-8',newline='') as f :
             # csvfile이 비었는지 아닌지 확인
             csvfile = list(csv.reader(f))  
@@ -73,12 +70,12 @@ with DAG(
         return result
 
     prediction = PythonVirtualenvOperator(task_id="prediction",
-            python_callable=make_logf,
-            requirements=["git+https://github.com/ThreeKcal/model.git@0.1.0/me"],
-            system_site_packages=True,
-            op_args=[file_path],
-            trigger_rule='all_done'
-            )
+        python_callable=make_logf,
+        requirements=["git+https://github.com/ThreeKcal/model.git@0.1.0/me"],
+        system_site_packages=True,
+        trigger_rule='all_done',
+        )
+    
 
     start = EmptyOperator(task_id='start')
     end = EmptyOperator(task_id='end')
