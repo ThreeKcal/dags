@@ -36,7 +36,7 @@ with DAG(
 
     save_data = BashOperator(task_id="savedata",
         bash_command="""
-        $SPARK_HOME/bin/spark-submit $AIRFLOW_HOME/py/pyspark_pj3.py "LogToMariaDB"
+        $SPARK_HOME/bin/spark-submit ./pyspark_pj3.py 
         """
 
         )
