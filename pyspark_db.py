@@ -32,7 +32,13 @@ with DAG(
     tags=['predict', 'ml', 'db'],
     ) as dag:
 
-
+    wait_for_dag_a = ExternalTaskSensor(
+    task_id='wait_for_dag_a',
+    external_dag_id='predict_emotion',  # DAG A의 ID
+    allowed_states=['success'],
+    failed_states=['failed', 'skipped'],
+    timeout=300,  # 5분 내에 완료되지 않으면 타임아웃
+    )
 
     save_data = BashOperator(task_id="savedata",
         bash_command="""
