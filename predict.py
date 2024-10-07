@@ -21,7 +21,7 @@ with DAG(
     'predict_emotion',
     default_args={
         'depends_on_past': True,
-        'retries': 1,
+        'retries': 0,
         'retry_delay': timedelta(seconds=3),
     },
     max_active_runs=1,
@@ -36,21 +36,23 @@ with DAG(
 
     
     def make_logf(**kwargs):
+        from datetime import datetime, timedelta
         from threekcal_model.worker import run
         import os
         import csv
         #ds_nodash 2012410071411 
-        print(kwargs['ds_nodash'])
-        print(type(kwargs['ds_nodash']))
-        a=kwargs['ds_nodash'].strfdatetime("%Y-%m-%d %H:%M:%S")
-        print(a)
-
-        file_path = f'/home/ubuntu/log/predict.log'
+        print(kwargs)
+        ts_nodash= kwargs['ts_nodash']
+        dt = datetime.strptime(ts_nodash[:-2], '%Y%m%dT%H%M')
+        print(dt)
+        formatted_time = dt.strftime('%Y%m%d%H%M')
+        print(formatted_time)
+        file_path = f'/home/ubuntu/log/{formatted_time}.log'
         print(file_path)
         dir_path=os.path.dirname(file_path)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path, exist_ok=True)
-        save_path = os.path.join(dir_path,'predict.log')
+        save_path = os.path.join(dir_path,f'{formatted_time}.log')
         log_data=run()
         
         if not os.path.exists(save_path):
@@ -72,7 +74,7 @@ with DAG(
     prediction = PythonVirtualenvOperator(task_id="prediction",
         python_callable=make_logf,
         requirements=["git+https://github.com/ThreeKcal/model.git@0.1.0/me"],
-        system_site_packages=True,
+        system_site_packages=False,
         trigger_rule='all_done',
         )
     
