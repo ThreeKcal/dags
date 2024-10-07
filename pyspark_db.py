@@ -33,17 +33,12 @@ with DAG(
     ) as dag:
 
 
-    def get_data():
-        from pyspark.main import get_prediction, connection
-        data= connection()
-        get_prediction=get_prediction()
 
+    save_data = BashOperator(task_id="savedata",
+        bash_command="""
+        $SPARK_HOME/bin/spark-submit $AIRFLOW_HOME/py/pyspark_pj3.py "LogToMariaDB"
+        """
 
-    save_data = PythonVirtualenvOperator(task_id="save_data",
-        python_callable=get_data,
-        requirements=["git+ssh://git@github.com:ThreeKcal/pyspark.git0.3", "pyspark==3.5.3"],
-        system_site_packages=False,
-        trigger_rule='all_done',
         )
     
 
