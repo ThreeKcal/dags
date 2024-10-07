@@ -32,13 +32,15 @@ with DAG(
     end_date=datetime(2024,10,8),
     catchup=True,
     tags=['predict', 'emotion', 'ml'],
-) as dag:
+    ) as dag:
+
+    file_path = __file__
+
 
     def make_logf():
         from threekcal_model.worker import run
         import os
         import csv
-        file_path= '/home/hahahellooo/pj3/dags'
         dir_path=os.path.dirname(file_path)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path, exist_ok=True)
@@ -49,9 +51,17 @@ with DAG(
             with open (save_path,mode="w",encoding='utf-8', newline='') as f:
                 writer = csv.writer(f) 
                 writer.writerow(['num','prediction_result','prediction_score','prediction_time'])
-        with open(save_path, mode='a', encoding='utf-8', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([log_data[0],log_data[1],log_data[2],log_data[3]])
+        existing_nums=[]
+        with open(save_path, mode='r', encoding='utf-8', newline='') as f:
+            reader = csv.reader(f)
+            next(reader) # 헤더건너뛰기
+            for row in reader:
+                existing_nums.append(int(row[0]))
+
+        if int(log_data[0]) not in existing_nums:
+            with open(save_path, mode='a', encoding='utf-8', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([log_data[0], log_data[1], log_data[2], log_data[3]])
         
         with open(save_path,mode='r',encoding='utf-8',newline='') as f :
             # csvfile이 비었는지 아닌지 확인
@@ -63,6 +73,7 @@ with DAG(
             python_callable=make_logf,
             requirements=["git+https://github.com/ThreeKcal/model.git@0.1.0/me"],
             system_site_packages=True,
+            op_args=[file_path],
             trigger_rule='all_done'
             )
 
