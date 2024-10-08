@@ -32,7 +32,9 @@ with DAG(
     catchup=True,
     tags=['predict', 'ml', 'db'],
     ) as dag:
+    
 
+    # Model Dag의 predict task를 실행할 때 까지 대기 시키는 센서오퍼레이터
     wait_logf = ExternalTaskSensor(
     task_id='wait_logf',
     external_dag_id='predict_emotion',  # DAG A의 ID
