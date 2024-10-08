@@ -5,6 +5,7 @@ import pandas as pd
 from airflow import DAG
 import subprocess
 from airflow.models import Variable
+from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import (
@@ -28,23 +29,24 @@ with DAG(
     schedule='*/3 * * * *',
     start_date=datetime(2024, 10, 4),
     end_date=datetime(2024,10,8),
-    catchup=False,
+    catchup=True,
     tags=['predict', 'ml', 'db'],
     ) as dag:
 
-    wait_for_dag_a = ExternalTaskSensor(
-    task_id='wait_for_dag_a',
-    external_dag_id='predict_emotion',  # DAG A의 ID
-    allowed_states=['success'],
-    failed_states=['failed', 'skipped'],
-    timeout=300,  # 5분 내에 완료되지 않으면 타임아웃
-    )
+    #wait_for_dag_a = ExternalTaskSensor(
+    #task_id='wait_for_dag_a',
+    #external_dag_id='predict_emotion',  # DAG A의 ID
+    #external_task_id='prediction',  # DAG A의 마지막 태스크 ID (필요한 경우)
+    #allowed_states=['success'],
+    #failed_states=['failed', 'skipped'],
+    #timeout=300,  # 5분 내에 완료되지 않으면 타임아웃
+    #)
 
-    save_data = BashOperator(task_id="savedata",
+    save_data = BashOperator(
+        task_id="savedata",
         bash_command="""
-        $SPARK_HOME/bin/spark-submit ./pyspark_pj3.py 
+        $SPARK_HOME/bin/spark-submit /home/centa/code/3kcal/dags/pyspark_pj3.py {{data_interval_start.strftime('%Y%m%d%H%M')}}
         """
-
         )
     
 

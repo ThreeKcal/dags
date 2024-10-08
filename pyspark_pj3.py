@@ -2,11 +2,13 @@ from pyspark.sql import SparkSession
 from threekcal_model.db import get_conn, select, dml
 import pandas as pd
 from pyspark.sql.types import StructType, StringType, FloatType, TimestampType, IntegerType, StructField
+import sys
 
 spark = SparkSession.builder.appName("LogToMariaDB").getOrCreate()
+sys.argv[1]
 
 #Spark로 predict.log읽기
-log_file='/home/ubuntu/log/predict.log'
+log_file=f'/home/ubuntu/log/{sys.argv[1]}.log'
 log_load = spark.read.csv(log_file, header=True)
 
 #MariaDB로 연결하기
