@@ -34,40 +34,44 @@ with DAG(
     tags=['predict', 'emotion', 'ml'],
     ) as dag:
 
-    
+    # run함수로 모델예측 후 로그 파일 만드는 함수 생성
     def make_logf(**kwargs):
         from datetime import datetime, timedelta
         from threekcal_model.worker import run
         import os
         import csv
-        #ds_nodash 2012410071411 
-        print(kwargs)
+        # keyword arguments를 사용하여 분단위로 로그 파일저장
+        # log_data 파일 이름 형태는 202410081122
         ts_nodash= kwargs['ts_nodash']
         dt = datetime.strptime(ts_nodash[:-2], '%Y%m%dT%H%M')
-        print(dt)
         formatted_time = dt.strftime('%Y%m%d%H%M')
-        print(formatted_time)
         file_path = f'/home/ubuntu/log/{formatted_time}.log'
-        print(file_path)
         dir_path=os.path.dirname(file_path)
+
+        # dir_path가 없으면 dir_path 만들고 save_path 생성
         if not os.path.exists(dir_path):
             os.makedirs(dir_path, exist_ok=True)
         save_path = os.path.join(dir_path,f'{formatted_time}.log')
         log_data=run()
+
+        # log_data가 없으면 "없습니다" 출력
         if len(log_data)==0:
             print("log data가 없습니다.")
             return True
         
+        # save_path 없으면 생성 후 head 작성
         if not os.path.exists(save_path):
             with open (save_path,mode="w",encoding='utf-8', newline='') as f:
                 writer = csv.writer(f) 
                 writer.writerow(['num','prediction_result','prediction_score','prediction_time'])
-
+        
+        # save_path 있으면 log_data 행 하나씩 읽어서 append
         with open(save_path, mode='a', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
             for i in range(len(log_data)):
                 writer.writerow([log_data[i][0], log_data[i][1], log_data[i][2], log_data[i][3]])
        
+       # log_data 만들어졌는지 파일크기로 확인
         with open(save_path,mode='r',encoding='utf-8',newline='') as f :
             # csvfile이 비었는지 아닌지 확인
             csvfile = list(csv.reader(f))  
