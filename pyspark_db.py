@@ -19,7 +19,7 @@ os.environ['LC_ALL'] = 'C'
 with DAG(
     'save_db',
     default_args={
-        'depends_on_past': True,
+        'depends_on_past': False,
         'retries': 1,
         'retry_delay': timedelta(seconds=3),
     },
@@ -33,14 +33,14 @@ with DAG(
     tags=['predict', 'ml', 'db'],
     ) as dag:
 
-    #wait_for_dag_a = ExternalTaskSensor(
-    #task_id='wait_for_dag_a',
-    #external_dag_id='predict_emotion',  # DAG A의 ID
-    #external_task_id='prediction',  # DAG A의 마지막 태스크 ID (필요한 경우)
-    #allowed_states=['success'],
-    #failed_states=['failed', 'skipped'],
-    #timeout=300,  # 5분 내에 완료되지 않으면 타임아웃
-    #)
+    wait_logf = ExternalTaskSensor(
+    task_id='wait_logf',
+    external_dag_id='predict_emotion',  # DAG A의 ID
+    external_task_id='prediction',  # DAG A의 마지막 태스크 ID (필요한 경우)
+    allowed_states=['success'],
+    failed_states=['failed', 'skipped'],
+    timeout=300,  # 5분 내에 완료되지 않으면 타임아웃
+    )
 
     save_data = BashOperator(
         task_id="savedata",
@@ -48,9 +48,8 @@ with DAG(
         $SPARK_HOME/bin/spark-submit /home/centa/code/3kcal/dags/pyspark_pj3.py {{data_interval_start.strftime('%Y%m%d%H%M')}}
         """
         )
-    
 
     start = EmptyOperator(task_id='start')
     end = EmptyOperator(task_id='end')
 
-    start >> save_data >> end
+    start >> wait_logf >> save_data >> end

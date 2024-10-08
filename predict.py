@@ -20,7 +20,7 @@ os.environ['LC_ALL'] = 'C'
 with DAG(
     'predict_emotion',
     default_args={
-        'depends_on_past': True,
+        'depends_on_past': False,
         'retries': 0,
         'retry_delay': timedelta(seconds=3),
     },
@@ -54,6 +54,9 @@ with DAG(
             os.makedirs(dir_path, exist_ok=True)
         save_path = os.path.join(dir_path,f'{formatted_time}.log')
         log_data=run()
+        if len(log_data)==0:
+            print("log data가 없습니다.")
+            return True
         
         if not os.path.exists(save_path):
             with open (save_path,mode="w",encoding='utf-8', newline='') as f:
