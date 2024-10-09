@@ -26,12 +26,16 @@ ML 어플리케이션 서비스를 위한 기본 리포지토리
 ### Structure
 ![Blank_diagram_-_Page_1_2](https://github.com/user-attachments/assets/2c2cfbd5-fa7e-4cee-858b-57ccb84e6715)
 
-본 에어플로우 어플리케이션은 `predict.py`, `pyspark_db.py`, `pyspark_pj3.py`로 이루어져 있으며, 각각 `streamlit` 어플리케이션의 모델 적용, 로그 파일 관리를 위한 `pyspark` 연동, 그리고 통계를 위해 존재합니다.
+본 에어플로우 어플리케이션은 `predict.py`, `pyspark_db.py`, `pyspark_pj3.py`로 이루어져 있습니다.
 
-- `prediction.py` DAG 실행 결과 및 그래프
+- `prediction.py` : 실제 모델 적용 및 예측을 실행하는 DAG 입니다. 해당 예측 프로세스에 대한 로그파일 역시 본 DAG에서 실행합니다.
 ![image](https://github.com/user-attachments/assets/dce759a2-cf03-4b02-89e5-e44340c9c44e)
 
-- 생성된 에어플로우 로그 파일 디렉토리 및 실제 내부 값
+- `pyspark_db.py` : `prediction.py` 의 로그파일이 생성된 후 이를 받아 시간변수를 추가해 `pyspark_pj3.py`로 전송합니다.
+
+- `pyspark_pj3.py` : 전송된 값 및 변수를 기반으로 `pyspark`과 연동, `mariadb` 데이터베이스를 업데이트합니다.
+ 
+### 생성된 에어플로우 로그 파일 디렉토리 및 실제 내부 값
 ![image](https://github.com/user-attachments/assets/c733df6d-e212-4565-8dfb-28b1963bc901)
 
 ![image](https://github.com/user-attachments/assets/982106c8-cfbc-42dc-aadb-9c74c00ac2a9)
