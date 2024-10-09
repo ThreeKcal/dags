@@ -46,5 +46,5 @@ dags_folder=<THIS_REPOSITORY_PATH>
 
 ※ 권한이 있는 이용자는 [프로젝트 schedule](https://github.com/orgs/ThreeKcal/projects/1/views/4)에서 확인할 수 있습니다.
 
-### `troubleshooting`
+### troubleshooting
 - 본 리포지토리 및 연관 리포지토리들의 `issues`, `pull request` 쪽을 참조해 주세요.
