@@ -31,14 +31,13 @@ ML 어플리케이션 서비스 중 `airflow` 기반 코드를 위한 리포지�
 
 
 ### Usage
-- `fastapi` 서버 런칭
+에어플로우 폴더의 `airflow.cfg` 파일을 수정해 `dags_folder` 값을 본 리포지토리 경로로 바꿉니다.
 ```bash
-$ uvicorn src/threekcal_model/api:app --host 0.0.0.0 --port 8000
-```
-
-- `steamlit` 서버 런칭
-```bash
-$ streamlit run src/threekcal_model/streamlit/main.py --server.port 9000
+# airflow.cfg
+#...
+[core]
+#...
+dags_folder=<THIS_REPOSITORY_PATH>
 ```
 
 ## 개발 관련 사항
