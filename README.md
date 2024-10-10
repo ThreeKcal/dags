@@ -9,6 +9,11 @@ ML 어플리케이션 서비스 중 `airflow` 기반 코드를 위한 리포지�
 - 해당 prediction에 대해 실제 sentiment label 및 피드백 코멘트 역시 입력
 - Model 부분을 더 알고 싶다면 [이 리포지토리](https://github.com/ThreeKcal/model/tree/main) 확인
 - Pyspark 부분을 더 알고 싶다면 [이 리포지토리](https://github.com/ThreeKcal/pyspark/tree/main)  확인
+- <br></br>
+
+## 기술 스택
+<img src="https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=Python&logoColor=F5F7F8"/>  <img src="https://img.shields.io/badge/Spark-3.5.1-E25A1C?style=flat&logo=apachespark&logoColor=F5F7F8"/>  <img src="https://img.shields.io/badge/Airflow-2.7.0-017CEE?style=flat&logo=apacheairflow&logoColor=F5F7F8"/>  <img src="https://img.shields.io/badge/Mariadb-003545?style=flat&logo=mariadb&logoColor=F5F7F8"/>  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=F5F7F8"/>  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logoColor=F5F7F8"/>
+<br></br>
 
 
 ## Features
