@@ -21,6 +21,8 @@ ML 어플리케이션 서비스 중 `airflow` 기반 코드를 위한 리포지�
 ![image](https://github.com/user-attachments/assets/dce759a2-cf03-4b02-89e5-e44340c9c44e)
 
 - `pyspark_db.py` : `prediction.py` 의 로그파일이 생성된 후 이를 받아 시간변수를 추가해 `pyspark_pj3.py`로 전송합니다.
+![image](https://github.com/user-attachments/assets/fc7c898d-a893-4216-a283-bad39cbdebfd)
+
 
 - `pyspark_pj3.py` : 전송된 값 및 변수를 기반으로 `pyspark`과 연동, `mariadb` 데이터베이스를 업데이트합니다.
  
